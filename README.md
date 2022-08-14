@@ -1,46 +1,99 @@
-# Getting Started with Create React App
+# Getting Started with Create React Typescript TodoList App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+To setup the typescript project use either npm or yarn commands:
+### npm command
+```
+npx create-react-app . — template typescript
+```
+### yarn command
+```
+yarn create react-app . — template typescript
+```
 
-## Available Scripts
+## Folder structure 
+Once your created you will get the folder structure like this:
 
-In the project directory, you can run:
 
-### `npm start`
+```.
+└── typescript-react-app
+    ├── node_modules		
+    ├── public
+    ├── package-lock.json	
+    ├── src
+    ├── README.md		
+    ├── package.json		
+    └── tsconfig.json
+ ```   
+ The <code>tsconfig.json </code> is responsible for compile of typescript code
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## Create state variables 
+```
+const [task, setTask]= useState<string>("");
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+const [taskDeadline, setTaskDeadline]= useState<number>(0);
+ 
+const [todoList, setTodoList] = useState<ITask[]>([]);
+```
+ 
+ using above states we can able to create task and maintain the task list. It is typescript so we have to mention the type of variable.
+ 
+## Create event handlers
+```
+<input type="text" placeholder='Task...' name="task" value={task} onChange={handleChange}/> 
+<input type="number" placeholder='Deadline ( in days )...' name="deadline" value={taskDeadline} onChange={handleChange}/>
+```
+The two lines contains the <code>onChange</code> event handler. When the user changing the input value this event will get triggered from UI and <code>handleChange</code> will get execute.
 
-### `npm test`
+Like <code> onChange</code> we are have lot of overridden methods available in javascript that can be utilized depends on context
+To Learn further check this out <link>https://www.w3schools.com/jsref/event_onchange.asp</link>
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Create Components
 
-### `npm run build`
+Create new folder called "components" under <code>src</code>. Inside the components folder, create file as "TodoTask.tsx" 
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Code
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+```
+import React from 'react'
+import { ITask } from '../interface/Interface'
+interface Props{
+    task:ITask;
+    completeTask(taskNameToDelete:string):void;
+}
+const TodoTask=({task, completeTask}:Props)=> {
+  return (
+    <div className='task'>
+        <div className='content'>
+            <span>{task.taskName}</span><br/>
+            <span>{task.taskDeadline} days</span>
+        </div>
+        <button onClick={()=>{completeTask(task.taskName)}}>X</button>
+    </div>
+  )
+}
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+export default TodoTask
+```
+Above code contains interface in which we can type cast the task object and function called "completeTask".
+Inside the div we have two span tag to display task name and task deadline respectively
+then , we have button to perform the remove the completed task from the list.
 
-### `npm run eject`
+From the App.tsx , using attributes as props pass the task and completeTask props like this :
+```
+<TodoTask key={key} task={task} completeTask={completeTask}/>
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+## Run the app
+```
+npm start
+```
+You can now view typescript-react-app in the browser.
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+  Local:            http://localhost:3000
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+To create a production build, use 
+```
+npm run build
+```
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+Credits & Thanks to  : <a href="https://www.youtube.com/watch?v=bjnW2NLAofI">PedroTech</a>
